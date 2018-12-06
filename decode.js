@@ -61,6 +61,18 @@ const mid = (hi + lo) / 2.0;
 const durations = samples_to_duration(samples);
 const hl = duration_to_hl(durations);
 
+/*
+durations.forEach((e,i)=>{
+   process.stdout.write(`${e},`);
+   if(i%20 === 0) process.stdout.write("\n");
+});
+
+hl.forEach((e,i)=>{
+   process.stdout.write(e);
+   if(i%80 === 0) process.stdout.write("\n");
+});
+*/
+
 let bytes = hl_to_bytes(hl);
 const address = bytes[0]*256+bytes[1];
 if(options.noheader) {
@@ -91,16 +103,17 @@ function hl_to_bytes(hl) {
    for(ptr=0; ptr<hl.length-8;) {
       const bit = look(hl, ptr);
       if(bit === 0) {
+         // console.log(`start bit found at pos ${ptr}`);
          // start bit found
          const start_bit = read_bit(hl);
-         const bit7      = read_bit(hl);
-         const bit6      = read_bit(hl);
-         const bit5      = read_bit(hl);
-         const bit4      = read_bit(hl);
-         const bit3      = read_bit(hl);
-         const bit2      = read_bit(hl);
-         const bit1      = read_bit(hl);
          const bit0      = read_bit(hl);
+         const bit1      = read_bit(hl);
+         const bit2      = read_bit(hl);
+         const bit3      = read_bit(hl);
+         const bit4      = read_bit(hl);
+         const bit5      = read_bit(hl);
+         const bit6      = read_bit(hl);
+         const bit7      = read_bit(hl);
          const parity    = read_bit(hl);
          const stop_bit1 = read_bit(hl);
          const stop_bit2 = read_bit(hl);
@@ -125,6 +138,7 @@ function hl_to_bytes(hl) {
                (bit0 << 0);
                         
             bytes.push(byte);
+            // console.log(`byte accepted at pos ${ptr}`);
          }
       }
       else ptr++;
@@ -180,15 +194,3 @@ function look(hl, ptr) {
 
    return -1;
 }
-
-
-/*
-// debug code
-
-durations.forEach((e)=>process.stdout.write(e.toString()));
-
-hl.forEach((e,i)=>{
-   process.stdout.write(e);
-   if(i%80 === 0) process.stdout.write("\n");
-});
-*/
