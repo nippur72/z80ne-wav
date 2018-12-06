@@ -14,7 +14,8 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test1": "node encode -i test.orig.hex -o test.encoded.wav -a 0 & node decode -i test.encoded.wav -o test.decoded.hex --noheader & FC /B test.orig.hex test.decoded.hex",
+    "test2": "node decode -i test.orig.wav -o test.decoded.hex --noheader & FC /B test.orig.hex test.decoded.hex"
   },
   "keywords": [
     "Z80NE"
