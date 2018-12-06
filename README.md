@@ -47,7 +47,7 @@ Data are saved on the WAV file using Kansas Standard format, with 1200 Hz and 24
 For every data bytes these data bits are written on tape:
 
 - 1 start bit at 0 (that is 4 periods at 1200 Hz)
-- 8 data bits, encoded as explained previously, starting from the most meaningful bit to the less one
+- 8 data bits, encoded as explained previously, starting from the least meaningful bit to the most one
 - 1 parity bit (even) computed on data bits: parity bit is 0 if the number of 1 of 8 data bits is even, it's 1 if the number of 1 of 8 data bits is odd
 - 2 stop bits at 1 (that is 16 periods at 2400 Hz).
 
