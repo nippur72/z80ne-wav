@@ -65,7 +65,7 @@ let bytes = hl_to_bytes(hl);
 const address = bytes[0]*256+bytes[1];
 if(options.noheader) {
    // skip 2 header bytes
-   bytes = bytes.slice(0,-2);
+   bytes = bytes.slice(2);
 }
 const buffer = new Uint8Array(bytes);
 
@@ -138,7 +138,7 @@ function samples_to_duration(samples) {
    for(let t=0, c=0; t<samples.length; t++) {
       const s = samples[t];
       c++;
-      if(last_s < 0 && s > 0) {
+      if(last_s < 0 && s >= 0) {
          // edge detected
          durations.push(c);
          c=0;
