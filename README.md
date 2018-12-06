@@ -17,12 +17,14 @@ npm i z80ne-wav -g
 From the command prompt:
 
 ```
-decodewav -i inputfile.wav -o outputfile.hex [--noheader] [-b 300|600|1200]
+decodewav -i inputfile.wav -o outputfile.hex [--noheader] [-b 300|600|1200] [--invert]
 ```
 
 The `--noheader` switch is used to skip the two bytes header that encode the starting address of the file in memory.
 
 The `-b` option sets de baudrate (300 by default).
+
+The `--invert` option inverts the polarity of the audio samples.
 
 # WAV file data format
 

@@ -11,6 +11,7 @@ const optionDefinitions = [
    { name: 'input', alias: 'i', type: String },
    { name: 'output', alias: 'o', type: String },   
    { name: 'noheader', alias: 'n', type: Boolean },
+   { name: 'invert', type: Boolean },
    { name: 'baud', alias: 'b', type: Number },   
 ];
 
@@ -24,7 +25,7 @@ const options = (()=>{
 })();
 
 if(options.input === undefined || options.output === undefined) {
-   console.log("usage: decodewav -i input.wav -o output.hex [--noheader] [-b 300|600|1200]");
+   console.log("usage: decodewav -i input.wav -o output.hex [--noheader] [-b 300|600|1200] [--invert]");
    process.exit(-1);
 }
 
@@ -34,7 +35,11 @@ const file = fs.readFileSync(fileName);
 
 const audioData = WavDecoder.decode.sync(file);
 
-const samples = audioData.channelData[0];
+let samples = audioData.channelData[0];
+
+// invert audio amplitude if --invert option is given
+if(options.invert) samples = samples.map(s=>-s);
+
 const samplerate = audioData.sampleRate;
 
 let low_tone = 1200, high_tone = 2400;
@@ -46,6 +51,8 @@ else if(options.baud !== undefined) {
    console.log("invalid baudrate option. Use 300, 600 or 1200 only.");
    process.exit(-1);
 };
+
+console.log(`sample rate is ${samplerate} Hz`);
 
 const lo = samplerate / low_tone;
 const hi = samplerate / high_tone;
