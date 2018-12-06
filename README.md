@@ -1,8 +1,9 @@
 # z80ne-wav
 
-Utility for decoding WAV files for the Z80 N.E. Nuova Elettronica computer. 
+Utility for encoding/decoding WAV files for the Z80 N.E. Nuova Elettronica computer. 
 
-It takes a WAV file created with the LX.385 tape interface and produces a binary file. 
+`decodewav` takes a WAV file created with the LX.385 tape interface and produces a binary (.HEX) file. 
+`encodewav` does the opposite, takes a .HEX file and generates a .WAV file to be loaded on the Z80NE. 
 
 # Installation
 
@@ -12,7 +13,7 @@ You must have `node` installed. From the command prompt:
 npm i z80ne-wav -g
 ```
 
-# Usage
+# Decoding a WAV
 
 From the command prompt:
 
@@ -25,6 +26,19 @@ The `--noheader` switch is used to skip the two bytes header that encode the sta
 The `-b` option sets de baudrate (300 by default).
 
 The `--invert` option inverts the polarity of the audio samples.
+
+# Encoding a WAV
+
+From the command prompt:
+
+```
+encodewav -i inputfile.hex -o outputfile.wav [-b 300|600|1200] [-a address]
+```
+
+The `-b` option sets de baudrate (300 by default).
+
+The `-a` option specifies the starting address in memory where the file is going to be loaded. 
+If omitted, the starting address will be the first two bytes in the file.
 
 # WAV file data format
 
