@@ -10,7 +10,8 @@ const commandLineArgs = require('command-line-args');
 const optionDefinitions = [
    { name: 'input', alias: 'i', type: String },
    { name: 'output', alias: 'o', type: String },   
-   { name: 'noheader', alias: 'n', type: Boolean },   
+   { name: 'noheader', alias: 'n', type: Boolean },
+   { name: 'baud', alias: 'b', type: Number },   
 ];
 
 const options = (()=>{ 
@@ -23,7 +24,7 @@ const options = (()=>{
 })();
 
 if(options.input === undefined || options.output === undefined) {
-   console.log("usage: decodewav -i input.wav -o output.hex [-noheader]");
+   console.log("usage: decodewav -i input.wav -o output.hex [--noheader] [-b 300|600|1200]");
    process.exit(-1);
 }
 
@@ -36,24 +37,25 @@ const audioData = WavDecoder.decode.sync(file);
 const samples = audioData.channelData[0];
 const samplerate = audioData.sampleRate;
 
-const lo = samplerate / 1200;
-const hi = samplerate / 2400;
+let low_tone = 1200, high_tone = 2400;
+
+     if(options.baud ===  300) { low_tone = 1200, high_tone = 2400 }
+else if(options.baud ===  600) { low_tone = 2400, high_tone = 4800 }
+else if(options.baud === 1200) { low_tone = 4800, high_tone = 9600 }
+else if(options.baud !== undefined) { 
+   console.log("invalid baudrate option. Use 300, 600 or 1200 only.");
+   process.exit(-1);
+};
+
+const lo = samplerate / low_tone;
+const hi = samplerate / high_tone;
 const mid = (hi + lo) / 2.0;
 
 const durations = samples_to_duration(samples);
 const hl = duration_to_hl(durations);
 
-// durations.forEach((e)=>process.stdout.write(e.toString()));
-
-/*
-hl.forEach((e,i)=>{
-   process.stdout.write(e);
-   if(i%80 === 0) process.stdout.write("\n");
-});
-*/
-
 let bytes = hl_to_bytes(hl);
-const address = bytes[0]+bytes[0]*256;
+const address = bytes[0]*256+bytes[1];
 if(options.noheader) {
    // skip 2 header bytes
    bytes = bytes.slice(0,-2);
@@ -172,3 +174,14 @@ function look(hl, ptr) {
    return -1;
 }
 
+
+/*
+// debug code
+
+durations.forEach((e)=>process.stdout.write(e.toString()));
+
+hl.forEach((e,i)=>{
+   process.stdout.write(e);
+   if(i%80 === 0) process.stdout.write("\n");
+});
+*/

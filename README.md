@@ -17,10 +17,12 @@ npm i z80ne-wav -g
 From the command prompt:
 
 ```
-decodewav -i inputfile.wav -o outputfile.hex [-noheader]
+decodewav -i inputfile.wav -o outputfile.hex [--noheader] [-b 300|600|1200]
 ```
 
-The `-noheader` switch is used to skip the two bytes header that encode the starting address of the file in memory.
+The `--noheader` switch is used to skip the two bytes header that encode the starting address of the file in memory.
+
+The `-b` option sets de baudrate (300 by default).
 
 # WAV file data format
 
@@ -32,5 +34,11 @@ For every data bytes these data bits are written on tape:
 - 8 data bits, encoded as explained previously, starting from the most meaningful bit to the less one
 - 1 parity bit (even) computed on data bits: parity bit is 0 if the number of 1 of 8 data bits is even, it's 1 if the number of 1 of 8 data bits is odd
 - 2 stop bits at 1 (that is 16 periods at 2400 Hz).
+
+For higher speeds it's sufficient to double frequencies. So:
+
+- for 300 bps 0 bits are at 1200 Hz, 1 bits are at 2400 Hz
+- for 600 bps 0 bits are at 2400 Hz, 1 bits are at 4800 Hz
+- for 1200 bps 0 bits are at 4800 Hz, 1 bits are at 9600 Hz.
 
 The first two saved bytes are the memory address of the first following byte (the first byte is the most meaningful address byte, then there is the less meaningful one).
