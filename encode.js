@@ -14,6 +14,7 @@ const options = parseOptions([
    { name: 'baud', alias: 'b', type: Number },   
    { name: 'head', alias: 'h', type: Number },   
    { name: 'tail', alias: 't', type: Number },
+   { name: 'invert', type: Boolean },
    { name: 'samplerate', alias: 's', type: Number },
    { name: 'sinewave', type: Boolean },
    { name: 'squarewave', type: Boolean },
@@ -29,6 +30,7 @@ if(options.input === undefined || options.output === undefined) {
    console.log("         -h or --head num        the length of the sync header in seconds (default 10 secs)");
    console.log("         -t or --tail num        the length of the sync tail in seconds (default 5 secs)");
    console.log("         -s or --samplerate num  the samplerate of the output WAV file (44100 default)");
+   console.log("         --invert                inverts the polarity of the audio samples");
    console.log("         --sinewave              uses a sine wave for generating tones (default)");
    console.log("         --squarewave            uses a square wave for generating tones");
    console.log("         --triangularwave        emulates a realistic LX.385 wave ");
@@ -83,7 +85,9 @@ let head = new Array(head_len_bits).fill(1);
 let tail = new Array(tail_len_bits).fill(1);
 bits = [ ...head, ...bits, ...tail];
 
-const samples = bitsToSamples(bits);
+let samples = bitsToSamples(bits);
+
+if(options.invert) samples = samples.map(e=>-e);
 
 const wavData = {
   sampleRate: SAMPLE_RATE,
