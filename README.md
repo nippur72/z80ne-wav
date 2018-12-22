@@ -32,13 +32,15 @@ The `--invert` option inverts the polarity of the audio samples.
 From the command prompt:
 
 ```
-encodewav -i inputfile.hex -o outputfile.wav [-b 300|600|1200] [-a address]
+encodewav -i inputfile.hex -o outputfile.wav [-b 300|600|1200] [-a address] 
 ```
 
 The `-b` option sets de baudrate (300 by default).
 
 The `-a` option specifies the starting address in memory where the file is going to be loaded. 
 If omitted, the starting address will be the first two bytes in the file.
+
+See the command line help for more options.
 
 # WAV file data format
 

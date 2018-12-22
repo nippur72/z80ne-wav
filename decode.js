@@ -7,22 +7,13 @@ const WavDecoder = require("wav-decoder");
 
 const commandLineArgs = require('command-line-args');
 
-const optionDefinitions = [
+const options = parseOptions([
    { name: 'input', alias: 'i', type: String },
    { name: 'output', alias: 'o', type: String },   
    { name: 'noheader', alias: 'n', type: Boolean },
    { name: 'invert', type: Boolean },
    { name: 'baud', alias: 'b', type: Number },   
-];
-
-const options = (()=>{ 
-   try { 
-      return commandLineArgs(optionDefinitions); 
-   } catch(ex) {
-      console.log(ex.message);
-      process.exit(-1);
-   }
-})();
+]);
 
 if(options.input === undefined || options.output === undefined) {
    console.log("usage: decodewav -i input.wav -o output.hex [--noheader] [-b 300|600|1200] [--invert]");
@@ -193,4 +184,13 @@ function look(hl, ptr) {
       hl[ptr+7] === "H") return 1;   
 
    return -1;
+}
+
+function parseOptions(optionDefinitions) {
+   try {       
+      return commandLineArgs(optionDefinitions);
+   } catch(ex) {
+      console.log(ex.message);
+      process.exit(-1);
+   }
 }
