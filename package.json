@@ -1,6 +1,6 @@
 {
   "name": "z80ne-wav",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "Z80NE WAV decoder",
   "main": "decode.js",
   "bin": {
@@ -9,13 +9,16 @@
   },
   "dependencies": {
     "command-line-args": "^5.0.2",
+    "fili": "^2.0.3",
     "wav-decoder": "^1.3.0",
     "wav-encoder": "^1.3.0"
   },
   "devDependencies": {},
-  "scripts": {
-    "test1": "node encode -i test.orig.hex -o test.encoded.wav -a 0 & node decode -i test.encoded.wav -o test.decoded.hex --noheader & FC /B test.orig.hex test.decoded.hex",
-    "test2": "node decode -i test.orig.wav -o test.decoded.hex --noheader & FC /B test.orig.hex test.decoded.hex"
+  "scripts": {    
+    "test1": "del test.decoded.hex & del test.encoded.wav & node decode -i test.orig.wav -o test.decoded.hex --noheader & FC /B test.orig.hex test.decoded.hex",
+    "test2": "del test.decoded.hex & del test.encoded.wav & node encode -i test.orig.hex -o test.encoded.wav -a 0 -b  300 & node decode -i test.encoded.wav -o test.decoded.hex --noheader -b  300 & FC /B test.orig.hex test.decoded.hex",
+    "test3": "del test.decoded.hex & del test.encoded.wav & node encode -i test.orig.hex -o test.encoded.wav -a 0 -b  600 & node decode -i test.encoded.wav -o test.decoded.hex --noheader -b  600 & FC /B test.orig.hex test.decoded.hex",
+    "test4": "del test.decoded.hex & del test.encoded.wav & node encode -i test.orig.hex -o test.encoded.wav -a 0 -b 1200 & node decode -i test.encoded.wav -o test.decoded.hex --noheader -b 1200 & FC /B test.orig.hex test.decoded.hex"
   },
   "keywords": [
     "Z80NE"
