@@ -13,12 +13,13 @@ const options = parseOptions([
    { name: 'input', alias: 'i', type: String },
    { name: 'output', alias: 'o', type: String },   
    { name: 'noheader', alias: 'n', type: Boolean },
-   { name: 'invert', type: Boolean },
+   //{ name: 'invert', type: Boolean },
    { name: 'baud', alias: 'b', type: Number },   
+   { name: 'debug', type: Boolean },   
 ]);
 
 if(options.input === undefined || options.output === undefined) {
-   console.log("usage: decodewav -i input.wav -o output.hex [--noheader] [-b 300|600|1200] [--invert]");
+   console.log("usage: decodewav -i input.wav -o output.hex [--noheader] [-b 300|600|1200] [--debug]");
    process.exit(-1);
 }
 
@@ -49,7 +50,7 @@ console.log(`sample rate is ${samplerate} Hz`);
 
 const USE_DSP = true;
 
-if(USE_DSP) bytes = decodeDSP(samples, samplerate, low_tone, high_tone);
+if(USE_DSP) bytes = decodeDSP(samples, samplerate, low_tone, high_tone, options.debug);
 else        bytes = decodePWM(samples, samplerate, low_tone, high_tone);
 
 const address = bytes[0]*256+bytes[1];

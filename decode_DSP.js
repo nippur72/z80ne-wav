@@ -4,22 +4,41 @@ let buffer = [];
 
 let bitsize, halfsize;
 
-function decodeDSP(samples, samplerate, lowtone, highttone)
+function decodeDSP(samples, fileSampleRate, lowtone, highttone, debug)
 {
+   let samplerate = fileSampleRate;
+
+   const DOWNSAMPLE = false;
+
+   if(DOWNSAMPLE) 
+   {
+      samplerate = highttone * 4;
+      console.log(`donwsampling from ${fileSampleRate} Hz to ${samplerate} Hz...`);
+      const downSample = require("./downSample");
+      samples = downSample(samples, fileSampleRate, samplerate);
+      samples = new Float32Array(samples);   
+   }
+
+   console.log(`filtering`);
+   const filterSamples = require("./filter");    
+
    bitsize = samplerate / lowtone * 4;
    halfsize = bitsize / 2;
 
-   console.log("filtering...");
    console.log(`bitsize ${bitsize} samples`);
 
-   const filterSamples = require("./filter");
-   samples = filterSamples(samples, samplerate, lowtone, highttone);
+   samples = filterSamples(samples, samplerate, lowtone, highttone, debug);
 
    tape = samples;
    ptr = 0;   
 
    // initial sync
-   endOfStopBit();
+   while(ptr < tape.length) {
+      const header = endOfStopBit();
+      if(header > 128) break;
+   }
+
+   console.log(`initial stop bit ends at ${ptr}`);
 
    while(ptr < tape.length) {
       const startbit = read_bit();  // discarded
@@ -85,8 +104,11 @@ function read_bit() {
 function endOfStopBit() {
    const iptr = ptr;
    if(ptr >= tape.length) return 0;
+
+   // advance while stop bit signal
    while(tape[Math.round(ptr)]>0) ptr++;
 
+   // calculate length of stop bits, for end of tape marker
    const stop_length = (ptr-iptr) / bitsize;
    
    ptr += halfsize; // position to the mid of next bit
