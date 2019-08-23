@@ -24,8 +24,9 @@ const options = parseOptions([
 
 if(options.input === undefined || options.output === undefined) {
    console.log("usage: encodewav -i input.hex -o output.wav [-a address] [-b 300|600|1200] ...options...");
-   console.log("         -a or --address num     memory loading address (if not specified the address");
-   console.log("                                 will be the first two bytes in the input file)");
+   console.log("         -a or --address num     memory loading address (decimal or hex with '0x' prefix.");
+   console.log("                                 (if not specified the address will be formed from the");
+   console.log("                                 first two bytes of the input file)");
    console.log("         -b or --baud num        the baudrate among 300, 600 and 1200 baud. (300 is default)");
    console.log("         -h or --head num        the length of the sync header in seconds (default 10 secs)");
    console.log("         -t or --tail num        the length of the sync tail in seconds (default 5 secs)");

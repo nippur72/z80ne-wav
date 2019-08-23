@@ -1,6 +1,14 @@
 function filterSamples(samples, samplerate, lo, hi, writeDebugWav) {
    var Fili = require('fili');   
 
+   /*
+   // add noise
+   samples = maximize(samples).map(s => {
+      const noise = (Math.random()*2 - 1) * 0.75;
+      return (s*5 + noise) / 6;
+   });
+   */
+
    const calc = new Fili.FirCoeffs();
 
    const multiplier = samplerate / 44100;

@@ -7,13 +7,13 @@ Utility for encoding/decoding WAV files for the Z80 N.E. Nuova Elettronica compu
 
 # Installation
 
-You must have `node` installed. From the command prompt:
+You must have [Node.js](https://nodejs.org) installed. From the command prompt:
 
 ```
 npm i z80ne-wav -g
 ```
 
-# Decoding a WAV
+# Decoding a WAV file
 
 From the command prompt:
 
@@ -38,7 +38,8 @@ encodewav -i inputfile.hex -o outputfile.wav [-b 300|600|1200] [-a address]
 The `-b` option sets de baudrate (300 by default).
 
 The `-a` option specifies the starting address in memory where the file is going to be loaded. 
-If omitted, the starting address will be the first two bytes in the file.
+It can be either a decimal or hexadecimal (with `0x` prefix) number. If omitted, the starting 
+address will be formed from the first two bytes in the file.
 
 See the command line help for more options.
 
